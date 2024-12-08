@@ -9,6 +9,7 @@ public class BattleshipGame {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
         ArrayList<Battleship> battleships = setUpGame();
         displayBoard(gameBoard);
 
@@ -16,12 +17,7 @@ public class BattleshipGame {
         while (isAnyBattleshipLeft) {
             System.out.println("Try to guess hidden battleships");
             System.out.print("Input a coordinate (e.g. A1): ");
-            String guessedCoordinate = scanner.nextLine().toUpperCase();
-
-            if (!isValidCoordinate(guessedCoordinate)) {
-                System.out.println("\nInvalid coordinate");
-                continue;
-            }
+            String guessedCoordinate = scanner.nextLine();
 
             applyGuess(battleships, guessedCoordinate);
             numOfGuesses++;
@@ -78,30 +74,11 @@ public class BattleshipGame {
     }
 
     private static void updateBoard(String coordinate, BoardStatusType status) {
-        int[] indexCord = getIndexCoordsFromAlpha(coordinate);
-
-        gameBoard[indexCord[0]][indexCord[1]] = status.getSymbol();
+        // TODO: your code here
     }
 
     public static void applyGuess(ArrayList<Battleship> battleships, String guessedCoordinate) {
-        for (Battleship battleship : battleships) {
-            boolean isCorrectlyGuessed = battleship.getShipCoordinates().contains(guessedCoordinate);
-            if (!isCorrectlyGuessed) {
-                updateBoard(guessedCoordinate, BoardStatusType.MISSED);
-                continue;
-            }
-
-            battleship.hitShip(guessedCoordinate);
-            updateBoard(guessedCoordinate, BoardStatusType.HIT);
-
-            if (battleship.isDestroyed) {
-                for (String shipCoordinate : battleship.getShipCoordinates().toArray(new String[0])) {
-                    updateBoard(shipCoordinate, BoardStatusType.KILLED);
-                }
-                battleships.remove(battleship);
-            }
-            break;
-        }
+        // TODO: your code here
     }
 
     private static void placeShipsRandomly(ArrayList<Battleship> battleships) {
@@ -109,63 +86,14 @@ public class BattleshipGame {
         Set<String> reservedCoordinates = new LinkedHashSet<>();
         for (Battleship battleship : battleships) {
             boolean isShipPlaced = false;
-            int no_attempts = 0;
-            while (!isShipPlaced && no_attempts++ < 10) {
-                int randRowIndex = rand.nextInt(NUM_OF_ROWS);
-                int randColumnIndex = rand.nextInt(NUM_OF_COLUMNS);
-                String randomCoordinate = getAlphaCoordsFromIndex(randRowIndex, randColumnIndex);
-
-                if (reservedCoordinates.contains(randomCoordinate))
-                    continue;
-
-                Set<String> potentialCoordinates = new LinkedHashSet<>();
-                potentialCoordinates.add(randomCoordinate);
-                // !Collections.disjoint(reservedCoordinates, potentialCoordinates)
-                boolean isHorizontal = rand.nextBoolean();
-                for (int i = 1; i < battleship.getSizeOfShip(); i++) {
-                    randomCoordinate = getAlphaCoordsFromIndex(randRowIndex + (isHorizontal ? 0 : i), randColumnIndex + (isHorizontal ? i : 0));
-                    if (!isValidCoordinate(randomCoordinate)) {
-                        potentialCoordinates.clear();
-                        break;
-                    }
-
-                    potentialCoordinates.add(randomCoordinate);
-                }
-
-                // potential coordinates is not reserved, so place the ship
-                if (!potentialCoordinates.isEmpty() && Collections.disjoint(reservedCoordinates, potentialCoordinates)) {
-                    reservedCoordinates.addAll(potentialCoordinates);
-                    battleship.setShipCoordinates(potentialCoordinates);
-                    isShipPlaced = true;
-                }
-            }
+            // TODO: your code here
         }
     }
+
+    // TODO: potentially more methods here
 
     public static String getAlphaCoordsFromIndex(int rowIndex, int columnIndex) {
         int rowNameStartASCII = 65; // for A
         return Character.toString(rowNameStartASCII + rowIndex) + ++columnIndex;
-    }
-
-    public static int[] getIndexCoordsFromAlpha(String coordinate) {
-        int rowNameASCII = 65; // for A
-        int row = coordinate.charAt(0) - rowNameASCII;
-        int column = Integer.parseInt(coordinate.substring(1)) - 1;
-
-        return new int[]{row, column};
-    }
-
-    public static boolean isValidCoordinate(String coordinate) {
-        int[] indexCord = getIndexCoordsFromAlpha(coordinate);
-        if (indexCord[0] < 0 || indexCord[1] < 0) {
-            return false;
-        }
-
-        // out of bound
-        if (indexCord[0] > NUM_OF_ROWS - 1 || indexCord[1] > NUM_OF_COLUMNS - 1) {
-            return false;
-        }
-
-        return true;
     }
 }
