@@ -32,3 +32,7 @@ A simple console-based implementation of the classic Battleship game in Java. Th
    ```bash
    javac *.java
    java BattleshipGame
+   
+## Create for yourself
+
+The `create-for-yourself` branch contains a boilerplate/template code for anyone who wants to try building this game from scratch. This is a great starting point for learning and practicing Java. It covers core language syntax up to Object-Oriented Programming (OOP) principles. Once you finish, you can compare with my implementation in `main` branch
